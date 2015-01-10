@@ -301,7 +301,7 @@ static SyscallDesc syscallDescs64[] = {
     /*  80 */ SyscallDesc("chdir", unimplementedFunc),
     /*  81 */ SyscallDesc("fchdir", unimplementedFunc),
     /*  82 */ SyscallDesc("rename", renameFunc),
-    /*  83 */ SyscallDesc("mkdir", unimplementedFunc),
+    /*  83 */ SyscallDesc("mkdir", mkdirFunc),
     /*  84 */ SyscallDesc("rmdir", unimplementedFunc),
     /*  85 */ SyscallDesc("creat", unimplementedFunc),
     /*  86 */ SyscallDesc("link", unimplementedFunc),
