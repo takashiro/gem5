@@ -2,5 +2,11 @@ build/
 *.pyc
 *~
 m5out/
-*.swp
-
+etab.py
+cscope.files
+cscope.out
+*~
+.*.swp
+src/doxygen
+ext/dramsim2/DRAMSim2
+ext/mcpat/regression/*/*.out
