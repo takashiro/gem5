@@ -439,6 +439,22 @@ mkdirFunc(SyscallDesc *desc, int num, LiveProcess *p, ThreadContext *tc)
 }
 
 SyscallReturn
+rmdirFunc(SyscallDesc *desc, int num, LiveProcess *p, ThreadContext *tc)
+{
+    string path;
+
+    int index = 0;
+    if (!tc->getMemProxy().tryReadString(path, p->getSyscallArg(tc, index)))
+        return -EFAULT;
+
+    // Adjust path for current working directory
+    path = p->fullPath(path);
+
+    int result = rmdir(path.c_str());
+    return (result == -1) ? -errno : result;
+}
+
+SyscallReturn
 renameFunc(SyscallDesc *desc, int num, LiveProcess *p, ThreadContext *tc)
 {
     string old_name;

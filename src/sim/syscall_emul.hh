@@ -205,6 +205,10 @@ SyscallReturn unlinkFunc(SyscallDesc *desc, int num,
 SyscallReturn mkdirFunc(SyscallDesc *desc, int num,
                         LiveProcess *p, ThreadContext *tc);
 
+/// Target rmdir() handler.
+SyscallReturn rmdirFunc(SyscallDesc *desc, int num,
+                        LiveProcess *p, ThreadContext *tc);
+
 /// Target rename() handler.
 SyscallReturn renameFunc(SyscallDesc *desc, int num,
                          LiveProcess *p, ThreadContext *tc);
