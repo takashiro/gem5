@@ -302,6 +302,11 @@ SyscallReturn accessFunc(SyscallDesc *desc, int num,
                                LiveProcess *p, ThreadContext *tc,
                                int index);
 
+
+/// Target clone() handler.
+SyscallReturn mountFunc(SyscallDesc *desc, int num,
+                               LiveProcess *p, ThreadContext *tc);
+
 /// Futex system call
 ///  Implemented by Daniel Sanchez
 ///  Used by printf's in multi-threaded apps

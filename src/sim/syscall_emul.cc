@@ -31,6 +31,7 @@
 
 #include <fcntl.h>
 #include <unistd.h>
+#include <sys/mount.h>
 
 #include <cstdio>
 #include <iostream>
@@ -943,3 +944,32 @@ accessFunc(SyscallDesc *desc, int callnum, LiveProcess *p, ThreadContext *tc)
     return accessFunc(desc, callnum, p, tc, 0);
 }
 
+SyscallReturn
+mountFunc(SyscallDesc *desc, int callnum, LiveProcess *p, ThreadContext *tc)
+{
+    //int mount(const  char  *source,  const char *target, const char *filesystemtype, unsigned long mountflags, const void *data);
+    string source, target, filesystemtype;
+    unsigned long mountflags;
+    Addr data;
+
+    int index = 0;
+    SETranslatingPortProxy &proxy = tc->getMemProxy();
+
+    if(!proxy.tryReadString(source, p->getSyscallArg(tc, index)))
+        return -EFAULT;
+
+    if(!proxy.tryReadString(target, p->getSyscallArg(tc, index)))
+        return -EFAULT;
+
+    if(!proxy.tryReadString(filesystemtype, p->getSyscallArg(tc, index)))
+        return -EFAULT;
+
+    mountflags = p->getSyscallArg(tc, index);
+    data = p->getSyscallArg(tc, index);
+
+    DPRINTF(SyscallVerbose, "Calling mount: %s %s %s %lu\n", source.c_str(), target.c_str(), filesystemtype.c_str(), mountflags);
+
+    mount(source.c_str(), target.c_str(), filesystemtype.c_str(), mountflags, (void *) data);
+
+    return 0;
+}
