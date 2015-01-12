@@ -207,7 +207,6 @@ brkFunc(SyscallDesc *desc, int num, LiveProcess *p, ThreadContext *tc)
     return p->brk_point;
 }
 
-
 SyscallReturn
 closeFunc(SyscallDesc *desc, int num, LiveProcess *p, ThreadContext *tc)
 {
@@ -693,6 +692,33 @@ fcntl64Func(SyscallDesc *desc, int num, LiveProcess *process,
         return fcntl(process->sim_fd(fd), cmd);
         // return 0;
     }
+}
+
+/// Target time() function.
+SyscallReturn
+pipeFunc(SyscallDesc *desc, int callnum, LiveProcess *process,
+           ThreadContext *tc)
+{
+    int fds[2], sim_fds[2];
+    int pipe_retval = pipe(fds);
+
+    if (pipe_retval < 0) {
+        // error
+        return pipe_retval;
+    }
+
+    sim_fds[0] = process->alloc_fd(fds[0], "PIPE-READ", O_WRONLY, -1, true);
+    sim_fds[1] = process->alloc_fd(fds[1], "PIPE-WRITE", O_RDONLY, -1, true);
+
+    process->setReadPipeSource(sim_fds[0], sim_fds[1]);
+
+    int index = 0;
+    Addr taddr = (Addr) process->getSyscallArg(tc, index);
+    if(taddr != 0) {
+        SETranslatingPortProxy &p = tc->getMemProxy();
+        p.writeBlob(taddr, (uint8_t *) fds, (int) sizeof(fds));
+    }
+    return 0;
 }
 
 SyscallReturn

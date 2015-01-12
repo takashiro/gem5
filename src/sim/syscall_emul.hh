@@ -155,6 +155,10 @@ SyscallReturn getpagesizeFunc(SyscallDesc *desc, int num,
 SyscallReturn brkFunc(SyscallDesc *desc, int num,
                       LiveProcess *p, ThreadContext *tc);
 
+/// Target pipe() handler.
+SyscallReturn pipeFunc(SyscallDesc *desc, int num,
+                        LiveProcess *p, ThreadContext *tc);
+
 /// Target close() handler.
 SyscallReturn closeFunc(SyscallDesc *desc, int num,
                         LiveProcess *p, ThreadContext *tc);
